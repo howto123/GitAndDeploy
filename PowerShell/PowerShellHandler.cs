@@ -89,7 +89,7 @@ class PowerShellHandler
         {
             Console.Write($"now{successMsg}end");
             
-            if(successMsg != string.Empty)
+            if(successMsg != string.Empty || successMsg == "\n")
                 Console.WriteLine(successMsg);
         }
     }
