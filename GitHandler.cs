@@ -43,14 +43,9 @@ class GitHandler
         );
 
 
-        //shell.Execute(snippets.IsGitRepo);
-
-        Console.WriteLine($"Snippet is:");     
-        Console.WriteLine($"{snippets.ValidateOriginOrThrow}");
+        shell.Execute(snippets.IsGitRepo);
         shell.Execute(snippets.ValidateOriginOrThrow);
-        
         shell.Execute(snippets.ValidateBranchOrThrow);
-
         Console.WriteLine($"{snippets.GitPush}");
         shell.Execute(snippets.GitPush);
         // shell.Execute(snippets.ChangeToHookDirectory);
