@@ -87,11 +87,19 @@ class PowerShellHandler
         }
         else
         {
-            var arr = successMsg.ToCharArray();
-            Console.Write($"Length: {arr.Length}. First Byte: {(byte)arr[0]}. Second Byte: {(byte)arr[1]}.");
-            
-            if(successMsg != string.Empty || successMsg == "\n")
-                Console.WriteLine(successMsg);
+            WriteToConsoleUnlessEmpty(successMsg);
         }
+    }
+
+    private static void WriteToConsoleUnlessEmpty(string str)
+    {
+        var arr = str.ToCharArray();
+
+        // this checks for the standard "nothing"
+        if(arr.Length == 2 && (byte)arr[0] == 13 && (byte)arr[1] == 10)
+        {
+            return;
+        }
+        Console.WriteLine(str);
     }
 }
