@@ -87,7 +87,7 @@ class PowerShellHandler
         }
         else
         {
-            Console.Write($"now");
+            Console.Write($"now{successMsg}end");
             
             if(successMsg != string.Empty)
                 Console.WriteLine(successMsg);
