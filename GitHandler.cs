@@ -26,20 +26,19 @@ class GitHandler
             "test"
         );
 
-        if (ExecutesWithError("dir")) return;
         if (ExecutesWithError(snippets.IsGitRepo)) return;
         if (ExecutesWithError(snippets.IsGitRepo)) return;
         if (ExecutesWithError(snippets.ValidateOriginOrThrow)) return;
         if (ExecutesWithError(snippets.ValidateBranchOrThrow)) return;
         if (ExecutesWithError(snippets.GitPush)) return;
-        Console.WriteLine($"after first push");
+        Console.WriteLine($"git push");
         if (ExecutesWithError(snippets.ChangeToHookDirectory)) return;
         if (ExecutesWithError(snippets.ChangeToActionBranch)) return;
         if (ExecutesWithError(snippets.WriteToLogFile)) return;
         if (ExecutesWithError(snippets.GitAdd)) return;
         if (ExecutesWithError(snippets.GitCommit)) return;
         if (ExecutesWithError(snippets.GitPush)) return;
-        Console.WriteLine($"after first push");
+        Console.WriteLine($"trigger hook");
         if (ExecutesWithError("echo done!")) return;
 
     }
