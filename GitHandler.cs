@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using System.Management.Automation;
+using Exceptions;
 using PwShell;
 
 namespace GitAndDeploy;
@@ -11,101 +12,50 @@ namespace GitAndDeploy;
 
 class GitHandler
 {
-    private PowerShell _shell = PowerShell.Create();
+    private PowerShellHandler? _shell;
 
-    private string _currentPath;
-    private string _commitBranch;
-    private readonly string _absoluteHookRepoPath;
-    private readonly string _logfile;
-    private readonly string _hookBranch;
-    private readonly string _hookMessage;
-
-    public GitHandler(string currentPath, string commitBranch, Settings settings)
+    public void GitAndDeploy(Types.Project project, Types.Action action, string comment)
     {
-        _currentPath = currentPath;
-        _commitBranch = commitBranch;
-        _absoluteHookRepoPath = settings.GitHookPath;
-        _logfile = settings.LogFile;
-        _hookBranch = settings.HookBranch;
-        _hookMessage = settings.HookCommitMessage;
-    }
-
-    public static void GitAndDeploy(Types.Project project, Types.Action action, string comment)
-    {
-        //Console.WriteLine(Environment.GetEnvironmentVariable("ORIGIN"));
-        
-        var shell = new PowerShellHandler();
+        _shell = new PowerShellHandler();
         var snippets = new PwsSnippets
         (
             "https://github.com/howto123/GitAndDeploy.git",
             //Environment.GetEnvironmentVariable("ORIGIN")!,
-            "main"
+            "main",
+            Environment.GetEnvironmentVariable("HOOKPATH")!,
+            "test"
         );
 
-
-        shell.Execute(snippets.IsGitRepo);
-        shell.Execute(snippets.ValidateOriginOrThrow);
-        shell.Execute(snippets.ValidateBranchOrThrow);
-        Console.WriteLine($"{snippets.GitPush}");
-        shell.Execute(snippets.GitPush);
-        // shell.Execute(snippets.ChangeToHookDirectory);
-        // shell.Execute(snippets.ChangeToActionBranch);
-        // shell.Execute(snippets.WriteToLogFile);
-        // shell.Execute(snippets.GitAdd);
-        // shell.Execute(snippets.GitCommit);
-        // shell.Execute(snippets.GitPush);
+        if (ExecutesWithError("dir")) return;
+        if (ExecutesWithError(snippets.IsGitRepo)) return;
+        if (ExecutesWithError(snippets.IsGitRepo)) return;
+        if (ExecutesWithError(snippets.ValidateOriginOrThrow)) return;
+        if (ExecutesWithError(snippets.ValidateBranchOrThrow)) return;
+        if (ExecutesWithError(snippets.GitPush)) return;
+        Console.WriteLine($"after first push");
+        if (ExecutesWithError(snippets.ChangeToHookDirectory)) return;
+        if (ExecutesWithError(snippets.ChangeToActionBranch)) return;
+        if (ExecutesWithError(snippets.WriteToLogFile)) return;
+        if (ExecutesWithError(snippets.GitAdd)) return;
+        if (ExecutesWithError(snippets.GitCommit)) return;
+        if (ExecutesWithError(snippets.GitPush)) return;
+        Console.WriteLine($"after first push");
+        if (ExecutesWithError("echo done!")) return;
 
     }
 
-    public void GitAndDeploy(string message)
+    private bool ExecutesWithError(string shellCode)
     {
-        GitSetBranch(_commitBranch);
-        GitAddAll();
-        GitCommit(message);
-        GitPush();
-
-        ChangeDirectoryTo(_absoluteHookRepoPath);
-        GitSetBranch(_hookBranch);
-        UpdateLogFile();
-        GitAddAll();
-        GitCommit(_hookMessage);
-        GitPush();
-        ChangeDirectoryTo(_currentPath);
-    }
-
-    private void GitSetBranch(string branch)
-    {
-        _shell.AddScript($"git checkout {branch}");
-        _shell.Invoke();
-    }
-
-    private void GitAddAll()
-    {
-        _shell.AddScript($"git add .");
-        _shell.Invoke();
-    }
-
-    private void GitCommit(string message)
-    {
-        _shell.AddScript($"git commit -m {message}");
-        _shell.Invoke();
-    }
-
-    private void GitPush()
-    {
-        _shell.AddScript($"git push");
-        _shell.Invoke();
-    }
-
-    private void ChangeDirectoryTo(string absolutePath)
-    {
-        _shell.AddScript($"cd {absolutePath}");
-        _shell.Invoke();
-    }
-
-    private void UpdateLogFile()
-    {
-        _shell.AddScript($"echo {DateTime.Now} > {_logfile}");
-        _shell.Invoke();
+        if(_shell is null) throw new PreconditionException("_shell was not initialized!");
+        try
+        {
+            _shell.Execute(shellCode);
+        }
+        catch( PowerShellException)
+        {
+            // Message was already printed in Powershellhandler
+            return true;
+        }
+        return false;
     }
 }
