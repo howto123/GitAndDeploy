@@ -32,23 +32,24 @@ class GitHandler
 
     public static void GitAndDeploy(Types.Project project, Types.Action action, string comment)
     {
+        //Console.WriteLine(Environment.GetEnvironmentVariable("ORIGIN"));
         
         var shell = new PowerShellHandler();
         var snippets = new PwsSnippets
         (
-            "https://github.com/howto123/democracy-helper.git",
+            "https://github.com/howto123/GitAndDeploy.git",
+            //Environment.GetEnvironmentVariable("ORIGIN")!,
             "main"
         );
 
-        
 
         //shell.Execute(snippets.IsGitRepo);
 
-        // Console.WriteLine($"Snippet is:");
-             
-        // shell.Execute(snippets.ValidateOriginOrThrow);
+        Console.WriteLine($"Snippet is:");     
+        Console.WriteLine($"{snippets.ValidateOriginOrThrow}");
+        shell.Execute(snippets.ValidateOriginOrThrow);
         
-        //shell.Execute(snippets.ValidateBranchOrThrow);
+        shell.Execute(snippets.ValidateBranchOrThrow);
 
         Console.WriteLine($"{snippets.GitPush}");
         shell.Execute(snippets.GitPush);
