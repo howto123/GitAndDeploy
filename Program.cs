@@ -19,11 +19,10 @@ public class Program
 
     public static void Main(string[] args)
     {
-        var testArgs = new string[] {"GitAndDeploy", "TestTrigger", "main"};
 
         var ui = UserInterface.Create();
 
-        switch (testArgs.Length)
+        switch (args.Length)
         {
             case 0: 
             {
@@ -44,7 +43,7 @@ public class Program
             }
             case 3: 
             {
-                ui.HandleArgs(testArgs[0], testArgs[1], testArgs[2]);
+                ui.HandleArgs(args[0], args[1], args[2]);
                 break;
             }
             default:
