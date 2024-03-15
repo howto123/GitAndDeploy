@@ -87,7 +87,9 @@ class PowerShellHandler
         }
         else
         {
-            Console.Write($"now{successMsg}end");
+            var arr = successMsg.ToCharArray();
+            Console.Write($"now{arr.Length}end");
+            Array.ForEach<Char>(arr, c => Console.Write(((byte)c)));
             
             if(successMsg != string.Empty || successMsg == "\n")
                 Console.WriteLine(successMsg);
