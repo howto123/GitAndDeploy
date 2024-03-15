@@ -88,8 +88,7 @@ class PowerShellHandler
         else
         {
             var arr = successMsg.ToCharArray();
-            Console.Write($"now{arr.Length}end");
-            Array.ForEach<Char>(arr, c => Console.Write(((byte)c)));
+            Console.Write($"Length: {arr.Length}. First Byte: {(byte)arr[0]}. Second Byte: {(byte)arr[1]}.");
             
             if(successMsg != string.Empty || successMsg == "\n")
                 Console.WriteLine(successMsg);
