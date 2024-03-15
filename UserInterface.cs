@@ -124,6 +124,6 @@ class UserInterface
 
     private static void ProceedWithValidatedArgs(Types.Project p, Types.Action a, string c)
     {
-        GitHandler.GitAndDeploy(p, a, c);
+        new GitHandler().GitAndDeploy(p, a, c);
     }
 }
