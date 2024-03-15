@@ -20,7 +20,12 @@ class PowerShellHandler
 
         // subscribe errorMsg
         _shell.Streams.Error.DataAdded += (object sender, DataAddedEventArgs e) =>
-            errorMsg = ((PSDataCollection<ErrorRecord>)sender)[e.Index].ToString();
+        {
+            string maybeWeirdSpecialCase = ((PSDataCollection<ErrorRecord>)sender)[e.Index].ToString();
+            if(NoSpecialCase(maybeWeirdSpecialCase))
+                errorMsg = ((PSDataCollection<ErrorRecord>)sender)[e.Index].ToString();
+        };
+            
 
         AddScriptToShell(script);
 
@@ -28,6 +33,21 @@ class PowerShellHandler
 
         ClearCommands();
         PrintOutput(errorMsg, output);
+    }
+
+    private bool NoSpecialCase(string errorWord)
+    {
+        // git checkout <branch> and git push apparently write to the error stream
+        // even if they execute successfully. these are filtered by this statement:
+        return !
+        (
+            errorWord.Contains("Switched to branch") ||
+            (
+                errorWord.Contains("..") &&
+                errorWord.Contains(" -> ")
+            ) ||
+            errorWord.Contains("To https://")
+        );
     }
 
 
@@ -48,7 +68,9 @@ class PowerShellHandler
         StringBuilder sb = new();
         foreach (var outputItem in outputCollection)
         {
-            sb.AppendLine(outputItem.BaseObject.ToString());
+            var str = outputItem.BaseObject.ToString();
+            if(str != "\n")
+                sb.AppendLine(outputItem.BaseObject.ToString());
         }
         return sb.ToString();
     }
@@ -62,6 +84,7 @@ class PowerShellHandler
         if (!string.IsNullOrEmpty(errorMsg))
         {
             Console.Error.WriteLine($"Error!\n {errorMsg}");
+            throw new PowerShellException(errorMsg);
         }
         else
         {
