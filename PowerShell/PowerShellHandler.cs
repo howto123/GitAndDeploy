@@ -53,7 +53,7 @@ class PowerShellHandler
 
     private void AddScriptToShell(string script)
     {
-        _shell.AddCommand(script);
+        _shell.AddScript(script);
         _shell.AddCommand("Out-String");
     }
 
@@ -69,13 +69,7 @@ class PowerShellHandler
         foreach (var outputItem in outputCollection)
         {
             var str = outputItem.BaseObject.ToString()?.Trim();
-            if (str != string.Empty)
-            {
-                Console.WriteLine($"String is:" + str + "END");
-
-                sb.AppendLine(str);
-            }
-
+            sb.AppendLine(str);
         }
         return sb.ToString();
     }
@@ -93,7 +87,8 @@ class PowerShellHandler
         }
         else
         {
-            Console.WriteLine(successMsg);
+            if(successMsg != string.Empty)
+                Console.WriteLine(successMsg);
         }
     }
 }
