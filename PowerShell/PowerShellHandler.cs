@@ -70,7 +70,12 @@ class PowerShellHandler
         {
             var str = outputItem.BaseObject.ToString()?.Trim();
             if(str != string.Empty)
+            {
+                Console.WriteLine($"String is:" + str + "END");
+                
                 sb.AppendLine(str);
+            }
+                
         }
         return sb.ToString();
     }
