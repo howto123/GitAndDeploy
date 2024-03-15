@@ -54,7 +54,6 @@ class GitHandler
         // shell.Execute(snippets.GitAdd);
         // shell.Execute(snippets.GitCommit);
         // shell.Execute(snippets.GitPush);
-        
 
     }
 
