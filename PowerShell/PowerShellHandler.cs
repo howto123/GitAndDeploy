@@ -68,9 +68,9 @@ class PowerShellHandler
         StringBuilder sb = new();
         foreach (var outputItem in outputCollection)
         {
-            var str = outputItem.BaseObject.ToString();
-            if(str != "\n")
-                sb.AppendLine(outputItem.BaseObject.ToString());
+            var str = outputItem.BaseObject.ToString()?.Trim();
+            if(str != string.Empty)
+                sb.AppendLine(str);
         }
         return sb.ToString();
     }
