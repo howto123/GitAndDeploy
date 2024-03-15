@@ -19,7 +19,7 @@ public class Program
 
     public static void Main(string[] args)
     {
-        var testArgs = new string[] {"Project 2", "Action_Name_2", "mycomment"};
+        var testArgs = new string[] {"GitAndDeploy", "TestTrigger", "main"};
 
         var ui = UserInterface.Create();
 
@@ -32,13 +32,13 @@ public class Program
             }
             case 1: 
             {
-                Console.WriteLine($"Please set an action and a comment as well!\n");
+                Console.WriteLine($"Please set an action and the current git branch as well!\n");
                 ui.ShowArgList();
                 break;
             }
             case 2: 
             {
-                Console.WriteLine($"Please set a comment as well!\n");
+                Console.WriteLine($"Please set the current git branch as well!\n");
                 ui.ShowArgList();
                 break;
             }

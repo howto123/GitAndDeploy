@@ -36,7 +36,7 @@ class UserInterface
 
     }
 
-    public void HandleArgs(string maybeProject, string maybeAction, string comment)
+    public void HandleArgs(string maybeProject, string maybeAction, string activeBranch)
     {
         Types.Project project;
         Types.Action action;
@@ -63,7 +63,7 @@ class UserInterface
             return;
         }
 
-        ProceedWithValidatedArgs(project, action, comment);
+        ProceedWithValidatedArgs(project, action, activeBranch);
     }
 
     private void Initialize()
@@ -122,8 +122,8 @@ class UserInterface
         return found;
     }
 
-    private static void ProceedWithValidatedArgs(Types.Project p, Types.Action a, string c)
+    private static void ProceedWithValidatedArgs(Types.Project p, Types.Action a, string activeBranch)
     {
-        new GitHandler().GitAndDeploy(p, a, c);
+        new GitHandler().GitAndDeploy(p, a, activeBranch);
     }
 }

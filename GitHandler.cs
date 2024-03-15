@@ -8,22 +8,19 @@ using PwShell;
 namespace GitAndDeploy;
 
 
-
-
 class GitHandler
 {
     private PowerShellHandler? _shell;
 
-    public void GitAndDeploy(Types.Project project, Types.Action action, string comment)
+    public void GitAndDeploy(Types.Project project, Types.Action action, string activeBranch)
     {
         _shell = new PowerShellHandler();
         var snippets = new PwsSnippets
         (
-            "https://github.com/howto123/GitAndDeploy.git",
-            //Environment.GetEnvironmentVariable("ORIGIN")!,
-            "main",
-            Environment.GetEnvironmentVariable("HOOKPATH")!,
-            "test"
+            project.URLofOrigin,
+            activeBranch,
+            project.AbsoluteHookDirectory,
+            action.Branch
         );
 
         if (ExecutesWithError(snippets.IsGitRepo)) return;
@@ -39,8 +36,7 @@ class GitHandler
         if (ExecutesWithError(snippets.GitCommit)) return;
         if (ExecutesWithError(snippets.GitPush)) return;
         Console.WriteLine($"trigger hook");
-        if (ExecutesWithError("echo done!")) return;
-
+        Console.WriteLine($"done!");
     }
 
     private bool ExecutesWithError(string shellCode)
