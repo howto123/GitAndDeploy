@@ -22,10 +22,10 @@ class PowerShellHandler
         _shell.Streams.Error.DataAdded += (object sender, DataAddedEventArgs e) =>
         {
             string maybeWeirdSpecialCase = ((PSDataCollection<ErrorRecord>)sender)[e.Index].ToString();
-            if(NoSpecialCase(maybeWeirdSpecialCase))
+            if (NoSpecialCase(maybeWeirdSpecialCase))
                 errorMsg = ((PSDataCollection<ErrorRecord>)sender)[e.Index].ToString();
         };
-            
+
 
         AddScriptToShell(script);
 
@@ -53,7 +53,7 @@ class PowerShellHandler
 
     private void AddScriptToShell(string script)
     {
-        _shell.AddScript(script);
+        _shell.AddCommand(script);
         _shell.AddCommand("Out-String");
     }
 
@@ -69,13 +69,13 @@ class PowerShellHandler
         foreach (var outputItem in outputCollection)
         {
             var str = outputItem.BaseObject.ToString()?.Trim();
-            if(str != string.Empty)
+            if (str != string.Empty)
             {
                 Console.WriteLine($"String is:" + str + "END");
-                
+
                 sb.AppendLine(str);
             }
-                
+
         }
         return sb.ToString();
     }
