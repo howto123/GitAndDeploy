@@ -32,7 +32,7 @@ class UserInterface
         _projects.ForEach(p => PrintProject(p));
 
         var first = _projects.First();
-        Console.WriteLine($"\nYou could type for example: gitad '{first.Name}' '{first.Actions.First().Name}'\n");
+        Console.WriteLine($"\nYou could type for example: gitanddeploy '{first.Name}' '{first.Actions.First().Name} currentBranch'\n");
 
     }
 
